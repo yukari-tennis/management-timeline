@@ -1,7 +1,24 @@
-document.addEventListener("DOMContentLoaded", () => {
-    console.log("Management Timeline 起動");
-    const searchButton = document.getElementById("search");
-    searchButton.addEventListener("click", () => {
-        alert("検索機能はこれから作ります。");
-    });
-});
+async function loadCategories() {
+  const { data, error } = await supabaseClient
+    .from("categories")
+    .select("*")
+    .order("id");
+
+  if (error) {
+    console.error("カテゴリ取得エラー:", error);
+    return;
+  }
+
+  const categorySelect = document.getElementById("category");
+
+  data.forEach((category) => {
+    const option = document.createElement("option");
+
+    option.value = category.id;
+    option.textContent = category.name;
+
+    categorySelect.appendChild(option);
+  });
+}
+
+loadCategories();
